@@ -1,30 +1,34 @@
 /// <reference types="Cypress" />
 import dados from '../../fixtures/login.json'
+import LoginPage from '../../support/pageobjects/LoginPage'
+const loginPage = new LoginPage;
 
 describe('ST-1: Login', () => {
 
   beforeEach(() => {
     // Dado que eu acesso a página de login
-    cy.visit('/')
+    loginPage.acessar();
 
     // Localização dos campos do form de login
-    cy.carregarFormLogin();
+    // cy.carregarFormLogin();
   })
 
-  it('CT-01: Validar obrigatoriedade do email', () => {
+  it.only('CT-01: Validar obrigatoriedade do email', () => {
     const senha = dados['user_padrao']['senha'];
 
     // Quando eu deixo o campo de e-mail em branco no form de login
-    cy.get('@campoSenhaLogin').type(senha);
+    // cy.get('@campoSenhaLogin').type(senha);
+    loginPage.preencherSenha(senha);
 
     // E eu clico no botão [Acessar]
-    cy.get('button').contains('Acessar').click();
+    // cy.get('button').contains('Acessar').click();
+    loginPage.clicarAcessar();
 
     // Então a mensagem "É campo obrigatório" deve ser exibida
     cy.get('p').contains('É campo obrigatório').should('exist');
 
     // E não devo ser direcionado para a home
-    cy.url().should('eq', Cypress.config().baseUrl + '/');
+    cy.url().should('eq', Cypress.config().baseUrl);
   })
 
   it('CT-02: Validar obrigatoriedade de senha', () => {
